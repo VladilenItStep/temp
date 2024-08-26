@@ -244,6 +244,66 @@ try {
 
 
 
+// class CustomEror extends Error {
+//     constructor(mes) {
+//         super(mes)
+//             // this.name = 'CustomEror'
+//         this.name = this.constructor.name
+//         this.stack = (new Error()).stack
+//         this.somethingDo()
+//     }
+
+
+//     somethingDo() {
+//         fetch('https://jsonplaceholder.typicode.com/todos/1')
+//             .then(response => response.json())
+//             .then(json => console.log(json))
+//     }
+// }
+
+
+// try {
+//     throw new CustomEror('Привет как дела? Исправь ошибку')
+
+// } catch (e) {
+//     console.log(e);
+//     console.log(e.name);
+//     console.log(e.message);
+//     console.log(e.stack);
+
+
+// }
+
+
+// console.log('Скрип дошел до конца');
+
+// const p = document.querySelector('p')
+// const btn = document.querySelector('button')
+
+// const operations = ['+', '-', '*', '/']
+// let prevOperation = ''
+
+
+// function getRandomOperationsIndex() {
+//     return Math.floor(Math.random() * ((operations.length - 1) - 0 + 1) + 0);
+// }
+
+// function getRandomOperation() {
+
+//     const randomIndex = getRandomOperationsIndex()
+//     const randomOperation = operations[randomIndex]
+
+//     if (randomOperation === prevOperation) {
+//         getRandomOperation()
+//     } else {
+//         prevOperation = randomOperation
+//         p.innerText = randomOperation
+//     }
+// }
+
+// btn.addEventListener('click', getRandomOperation)
+
+
 class CustomEror extends Error {
     constructor(mes) {
         super(mes)
@@ -262,17 +322,104 @@ class CustomEror extends Error {
 }
 
 
-try {
-    throw new CustomEror('Привет как дела? Исправь ошибку')
 
-} catch (e) {
-    console.log(e);
-    console.log(e.name);
-    console.log(e.message);
-    console.log(e.stack);
 
+
+class ApiError extends Error {
+    constructor(mes) {
+        super(mes)
+        this.name = this.constructor.name
+        this.stack = (new Error).stack
+
+    }
+}
+
+
+
+class AuthError extends ApiError {
+    constructor(mes, role) {
+        super(mes)
+        this.userRole = role
+    }
+}
+
+
+const obj = {
+    name: 'Vald',
+    age: 32,
+    hasRole: false
+}
+
+function checkAuthToken(objUserData) {
+    try {
+        if (!objUserData.hasRole) {
+            throw new AuthError('Вы не зарегистрированы!')
+        } else {
+            // some code ...
+        }
+    } catch (e) {
+
+        if (e instanceof AuthError) {
+            // some code 
+            console.log(13123133);
+
+        } else {
+            console.log('не дойдет ');
+
+        }
+    }
 
 }
 
 
-console.log('Скрип дошел до конца');
+// 1
+
+// class MyClass {
+
+// }
+// class AnotherClass {
+
+// }
+
+// const obj1 = new MyClass()
+// const obj2 = new AnotherClass()
+
+// console.log(obj instanceof MyClass); // true
+// console.log(obj instanceof AnotherClass); // true
+
+
+// 2
+// class MyClass {
+
+// }
+// class AnotherClass {
+
+// }
+// const obj1 = new MyClass()
+// const obj2 = new AnotherClass()
+
+
+
+
+// console.log(obj1.constructor === AnotherClass);
+// console.log(obj1.constructor.name === 'MyClass');
+
+
+// 3
+
+class MyClass {
+
+}
+class AnotherClass {
+
+}
+const obj1 = new MyClass()
+const obj2 = new AnotherClass()
+
+
+
+console.log(Object.getPrototypeOf(obj1) === MyClass.prototype);
+console.log(Object.getPrototypeOf(obj2) === MyClass.prototype);
+
+
+checkAuthToken(obj)
